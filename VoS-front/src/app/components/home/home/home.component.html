@@ -1,0 +1,117 @@
+<div class="container backgroundContainer">
+    <h3 style="margin: 15px;">Overzicht</h3>
+
+    <div class="d-flex flex-column  mb-5">
+        <div class="row mt-3 align-self-center flex-column">
+            <h5>Verstuur het verslag</h5>
+            <p style="max-width: 600px;">Hier kunt u filteren in het verslag en dit verslag versturen naar een medewerker. Als u geen maand aanduid word het hele jaarverslag verstuurd.</p>
+        </div>
+        <div class="row align-self-center">
+            <form style="max-width: 750px;" [formGroup]="sendMailForm" (ngSubmit)="onSubmit()"
+                class="w-100 mt-4 d-flex justify-content-start">
+
+                <div class="form-group mr-3">
+                    <label for="user">Werknemer</label>
+                    <select class="custom-select" formControlName="user" id="user">
+                        <option selected>Selecteer</option>
+                        <ng-container *ngFor="let item of allUser">
+                            <option [value]="item.userID">{{item.firstname}} {{item.name}}</option>
+                        </ng-container>
+                    </select>
+                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback text-right">
+                        <div *ngIf="f.role.errors.required">Selecteer een maand</div>
+                    </div>
+                </div>
+                <div class="form-group mr-3">
+                    <label for="month">Maand</label>
+                    <select class="custom-select" formControlName="month" id="month">
+                        <option selected>Selecteer</option>
+                        <ng-container *ngFor="let item of maanden; let i = index">
+                            <option [value]="i">{{item}}</option>
+                        </ng-container>
+                    </select>
+                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback text-right">
+                        <div *ngIf="f.role.errors.required">Selecteer een maand</div>
+                    </div>
+                </div>
+                <div class="form-group d-flex">
+                    <button class="w-100 align-self-end" color="accent" mat-flat-button
+                        [disabled]="loadingSend && submitted" type="submit">
+                        <span *ngIf="loadingSend" class="spinner-border spinner-border-sm mr-1"></span>
+                        Mail verslag
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div style="margin-left: 0px;" class="col-6">
+            <div *ngIf="stats" class="row  d-flex justify-content-end align-items-end">
+                <div (click)="activate('showViolations')" [ngClass]="{'active': showViolations}" class="card">
+                    <h5 style="font-size: 18px; margin: 25px 0px 0px 10px;">Overtredingen</h5>
+                    <p style="font-size: 29px; margin: 30px 0 0 10px; line-height: 30px;">{{stats.violations}}</p>
+                    <a routerLink="/violations"
+                        style="font-size: 13px; line-height: 12px; color: #747474;  margin: 30px 0 0 10px;">Bekijk
+                        alle</a>
+                </div>
+                <div (click)="activate('showCameraViolations')" [ngClass]="{'active': showCameraViolations}"
+                    class="card">
+                    <h5 style="font-size: 18px; margin: 25px 0px 0px 10px;">Camera's</h5>
+                    <p style="font-size: 29px; margin: 30px 0 0 10px; line-height: 30px;">{{stats.cameras}}</p>
+                    <a routerLink="/cameras"
+                        style="font-size: 13px; line-height: 12px; color: #747474;  margin: 30px 0 0 10px;">Bekijk
+                        alle</a>
+                </div>
+            </div>
+            <div *ngIf="stats" class="row  d-flex justify-content-end align-items-end">
+                <div (click)="activate('showUsers')" [ngClass]="{'active': showUsers}" class="card">
+                    <h5 style="font-size: 18px; margin: 25px 0px 0px 10px;">Werknemers</h5>
+                    <p style="font-size: 29px; margin: 30px 0 0 10px; line-height: 30px;">{{stats.users}}</p>
+                    <a routerLink="/members"
+                        style="font-size: 13px; line-height: 12px; color: #747474;  margin: 30px 0 0 10px;">Bekijk
+                        alle</a>
+                </div>
+                <div (click)="activate('showLogs')" [ngClass]="{'active': showLogs}" class="card">
+                    <h5 style="font-size: 18px; margin: 25px 0px 0px 10px;">Aantal Logs</h5>
+                    <p style="font-size: 29px; margin: 30px 0 0 10px; line-height: 30px;">{{stats.logs}}</p>
+                    <a routerLink="/logs"
+                        style="font-size: 13px; line-height: 12px; color: #747474;  margin: 30px 0 0 10px;">Bekijk
+                        alle</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-center align-items-center">
+            <div class="card-graph chart chart2">
+                <div class="d-flex align-items-center flex-column pt-3 pb-3">
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 pb-5">
+        <div class="col-12">
+            <div *ngIf="showViolations" class="d-flex justify-content-center">
+                <form style="max-width: 750px;" [formGroup]="filterForm" (ngSubmit)="onSubmit()" class="w-100 mt-4">
+                    <div class="form-group">
+                        <label for="role">Filter op de laatste 12 maanden</label>
+                        <select class="custom-select" formControlName="maand" id="role">
+                            <option selected>Alles</option>
+                            <ng-container *ngFor="let item of maanden; let i = index">
+                                <option [value]="i">{{item}}</option>
+                            </ng-container>
+                        </select>
+                        <div *ngIf="submitted && f.role.errors" class="invalid-feedback text-right">
+                            <div *ngIf="f.role.errors.required">Selecteer een maand</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-graph chart chart1">
+                <div class="d-flex align-items-center flex-column pt-3 pb-3">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

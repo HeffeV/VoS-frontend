@@ -1,0 +1,105 @@
+<div id="app">
+  <mat-sidenav-container *ngIf="isLoggedIn" class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened class="sidenav">
+      <div style="margin-top: 40px;">
+        <img src="../assets/images/Aperam_Logo.svg" alt="logo Aperam"
+          style="width: 190px; margin: auto; display: block;">
+      </div>
+      <mat-action-list style="margin-top: 100px;">
+        <a *ngIf="isReception" [routerLink]="['reception']" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/reception.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Inchecken
+        </a>
+        <a *ngIf="isAdmin || isSecurity" [routerLink]="['home']" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/layer.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Overzicht
+        </a>
+        <a *ngIf="isAdmin || isSecurity" routerLink="livestream" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/stream.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Livestreams
+        </a>
+        <a *ngIf="isAdmin || isSecurity" routerLink="violations" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/warning.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Overtredingen
+        </a>
+        <a *ngIf="isAdmin || isSecurity" routerLink="logs" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/logs.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Logs
+        </a>
+        <a *ngIf="isAdmin" routerLink="cameras" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/cam.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Camera's
+        </a>
+        <a *ngIf="isAdmin" routerLink="members" routerLinkActive="active" mat-list-item>
+          <svg-icon style="margin-left: 20px;" src="../assets/icons/users.svg" [applyCss]="true"
+            [svgStyle]="{ 'width.px':50 }" routerLinkActive="activeSvg" class="svgIconColor"></svg-icon> Gebruikers
+        </a>
+      </mat-action-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar id="maintoolbar" class="d-flex mb-3">
+        <button mat-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="mr-auto p-2 ml-4" style="font-size: 16px;">
+        </div>
+        <div class="p-2 d-flex justify-content-center align-items-center" id="notificationholder">
+          <button [matMenuTriggerFor]="notif" mat-icon-button>
+            <mat-icon [matBadge]="notifCount" matBadgeColor="warn" matBadgePosition="above after">
+              notification_important
+            </mat-icon>
+          </button>
+          <mat-menu #notif="matMenu">
+            <div style="max-height: 200px; min-width: 500px;">
+              <button *ngIf="notifCount == 0" mat-menu-item>
+                <mat-icon>info</mat-icon>
+                <span>Er zijn geen notificaties</span>
+              </button>
+              <button style="background-color: rgba(182, 104, 183, 0.5);" *ngIf="notifCount > 1" (click)="clearAll()" mat-menu-item>
+                  <mat-icon>delete_sweep</mat-icon>
+                  <span>Lees alle</span>
+              </button>
+              <ng-container *ngIf="notifCount > 0">
+                <ng-container *ngFor="let item of notifications">
+                  <button *ngIf="!item.notificationSeen" (click)="navigateNotif(item)" mat-menu-item>
+                    <mat-icon>warning</mat-icon>
+                    <span>{{item.message}}</span>
+                  </button>
+                </ng-container>
+              </ng-container>
+            </div>
+          </mat-menu>
+        </div>
+        <div class="p-2">
+          <button mat-flat-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+            <div class="d-flex justify-content-start">
+              <div class="letterIcon d-flex justify-content-center align-items-center">
+                {{letter}}
+              </div>
+              &nbsp;
+              <div class="d-flex justify-content-center align-items-center">
+                {{name}} <mat-icon>keyboard_arrow_down</mat-icon>
+              </div>
+            </div>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button (click)="settings()" mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>Instellingen</span>
+            </button>
+            <button (click)="logout()" mat-menu-item>
+              <mat-icon>logout</mat-icon>
+              Uitloggen
+            </button>
+          </mat-menu>
+        </div>
+      </mat-toolbar>
+      <div class="m-3">
+        <div style="margin-top: 60px;">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <router-outlet name="login" *ngIf="!isLoggedIn"></router-outlet>
+</div>

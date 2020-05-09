@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/bootstrap";
+@import url("https://fonts.googleapis.com/css?family=Varela|Varela+Round&display=swap");
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "Varela Round", sans-serif;
+
+}
+
+.svgIconColor{
+  fill: #505050;
+}
+
+.letterIcon{
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  background-color: #B668B7;
+  color: white;
+  border-radius: 4px;
+}
+
+a{
+  text-decoration: none;
+
+}
+
+html,body{
+    min-height: 100vh;
+}
+
+body {
+  color: #505050;
+}
+
+h3{
+  font-size: 24px;
+}
+
+.backgroundContainer{
+  background-color: #fff;
+  box-shadow: 1px 1px 5px 0px lightgray;
+  padding: 15px 15px 0 15px;
+}
+
+button.mat-accent {
+  background-color: #B668B7;
+  color: #fff;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgb(230, 119, 68);
+}
+
+:host ::ng-deep  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #F25C19;
+}
+
+
